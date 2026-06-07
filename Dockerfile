@@ -23,7 +23,8 @@ COPY --from=build /app/dist /usr/share/nginx/html
 
 EXPOSE 80
 
+# nginx:alpine BusyBox wget kullanır — GNU'ya özgü --spider/--no-verbose desteklenmez
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost/ || exit 1
+  CMD wget -q -O /dev/null http://localhost/ || exit 1
 
 CMD ["nginx", "-g", "daemon off;"]
