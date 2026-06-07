@@ -1,0 +1,21 @@
+---
+interface Props {
+  class?: string;
+  showWord?: boolean;
+}
+const { class: cls = '', showWord = true } = Astro.props;
+---
+<a href="/" class={`group inline-flex items-center gap-2.5 ${cls}`} aria-label="Lume Beauty Studio ana sayfa">
+  <span class="relative grid place-items-center h-10 w-10 rounded-full bg-gradient-to-br from-blush to-blush-deep text-cream shadow-[0_8px_20px_-8px_rgba(179,132,138,0.7)] transition-transform duration-500 group-hover:scale-105">
+    <svg viewBox="0 0 32 32" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M16 4c-3 5-7 7.5-7 12a7 7 0 0 0 14 0c0-4.5-4-7-7-12Z" />
+      <path d="M13 16a3 3 0 0 0 3 3" />
+    </svg>
+  </span>
+  {showWord && (
+    <span class="leading-none">
+      <span class="block font-display text-xl tracking-[0.18em] text-espresso">LUME</span>
+      <span class="block text-[0.6rem] tracking-[0.42em] uppercase text-blush-deep">Beauty Studio</span>
+    </span>
+  )}
+</a>

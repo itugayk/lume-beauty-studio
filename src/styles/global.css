@@ -1,0 +1,258 @@
+@import "tailwindcss";
+
+/* ───────────────────────────────────────────────────────────
+   Lume Beauty Studio — Design tokens
+   Palet: pudra/nude + sıcak beyaz + gül kurusu + koyu kahve
+─────────────────────────────────────────────────────────── */
+@theme {
+  /* renkler */
+  --color-cream: #fdf8f4;
+  --color-cream-soft: #fbf1ea;
+  --color-powder: #f6e9e3;
+  --color-powder-deep: #efddd3;
+  --color-blush: #c9a0a0;
+  --color-blush-soft: #ddbcbc;
+  --color-blush-deep: #b3848a;
+  --color-mocha: #5a4234;
+  --color-mocha-soft: #7a6151;
+  --color-espresso: #33241b;
+  --color-gold: #c9a66b;
+  --color-gold-soft: #e2cda1;
+
+  /* tipografi */
+  --font-serif: "Fraunces", "Marcellus", Georgia, serif;
+  --font-display: "Marcellus", "Fraunces", Georgia, serif;
+  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
+
+  /* easing & timing */
+  --ease-lux: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ───────────────────────────────────────────────────────────
+   Base
+─────────────────────────────────────────────────────────── */
+@layer base {
+  :root {
+    color-scheme: light;
+    scroll-behavior: smooth;
+  }
+
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  body {
+    background-color: var(--color-cream);
+    color: var(--color-espresso);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: var(--color-espresso);
+  }
+
+  ::selection {
+    background: var(--color-blush);
+    color: #fff;
+  }
+
+  /* ince, zarif scrollbar */
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { background: var(--color-powder); }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-blush);
+    border-radius: 999px;
+    border: 2px solid var(--color-powder);
+  }
+}
+
+/* ───────────────────────────────────────────────────────────
+   Yardımcı sınıflar / kompozisyonlar
+─────────────────────────────────────────────────────────── */
+@layer components {
+  .container-lux {
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+  @media (min-width: 1024px) {
+    .container-lux { padding-inline: 2.5rem; }
+  }
+
+  /* küçük büyük-harf etiket */
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 0.72rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--color-blush-deep);
+  }
+
+  /* primer buton */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    padding: 0.95rem 2rem;
+    border-radius: 999px;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: transform 0.5s var(--ease-lux), box-shadow 0.5s var(--ease-lux),
+      background-color 0.4s ease, color 0.4s ease;
+    will-change: transform;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--color-mocha), var(--color-espresso));
+    color: var(--color-cream);
+    box-shadow: 0 14px 30px -12px rgba(51, 36, 27, 0.55);
+  }
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 22px 40px -14px rgba(51, 36, 27, 0.6);
+  }
+  .btn-blush {
+    background: linear-gradient(135deg, var(--color-blush), var(--color-blush-deep));
+    color: #fff;
+    box-shadow: 0 14px 30px -12px rgba(179, 132, 138, 0.6);
+  }
+  .btn-blush:hover { transform: translateY(-3px); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--color-mocha);
+    border: 1px solid color-mix(in srgb, var(--color-mocha) 30%, transparent);
+  }
+  .btn-ghost:hover {
+    background: var(--color-mocha);
+    color: var(--color-cream);
+    transform: translateY(-3px);
+  }
+
+  /* yumuşak kart */
+  .card-soft {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 1.75rem;
+    box-shadow: 0 30px 60px -40px rgba(90, 66, 52, 0.35);
+  }
+
+  /* serif başlık ölçekleri */
+  .display-1 {
+    font-family: var(--font-serif);
+    font-size: clamp(2.7rem, 7vw, 5.6rem);
+    line-height: 1.02;
+    font-weight: 300;
+  }
+  .display-2 {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 4.5vw, 3.4rem);
+    line-height: 1.08;
+    font-weight: 300;
+  }
+
+  /* italik vurgu */
+  .accent-italic {
+    font-style: italic;
+    font-optical-sizing: auto;
+    color: var(--color-blush-deep);
+  }
+}
+
+/* ───────────────────────────────────────────────────────────
+   Animasyon yardımcıları
+─────────────────────────────────────────────────────────── */
+@layer utilities {
+  /* scroll reveal başlangıç durumu (GSAP devralır) */
+  [data-reveal] { opacity: 0; }
+  .reveal-ready [data-reveal] { will-change: transform, opacity; }
+
+  .text-gradient {
+    background: linear-gradient(120deg, var(--color-mocha), var(--color-blush-deep) 60%, var(--color-gold));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .bg-grain {
+    position: relative;
+  }
+  .bg-grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: multiply;
+  }
+
+  .shimmer {
+    background: linear-gradient(
+      100deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.6) 50%,
+      transparent 70%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2.4s var(--ease-lux) infinite;
+  }
+  @keyframes shimmer {
+    to { background-position: -200% 0; }
+  }
+
+  /* marquee — yorum carousel */
+  @keyframes marquee-x {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  .animate-marquee {
+    animation: marquee-x var(--marquee-duration, 40s) linear infinite;
+  }
+  .marquee-paused:hover .animate-marquee {
+    animation-play-state: paused;
+  }
+
+  @keyframes float-slow {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-18px) rotate(3deg); }
+  }
+  .animate-float { animation: float-slow 9s ease-in-out infinite; }
+
+  @keyframes spin-slow {
+    to { transform: rotate(360deg); }
+  }
+  .animate-spin-slow { animation: spin-slow 26s linear infinite; }
+}
+
+/* hareket azaltma tercihi */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  [data-reveal] { opacity: 1 !important; }
+}

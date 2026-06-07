@@ -1,0 +1,50 @@
+---
+import Icon from './Icon.astro';
+import BeforeAfter from './BeforeAfter.astro';
+import { BEFORE_AFTER } from '../data/gallery';
+
+const feature = BEFORE_AFTER[0];
+const points = [
+  { t: 'Gerçek sonuçlar', d: 'Misafirlerimizin izinli paylaşılan dönüşümleri.' },
+  { t: 'Saç & cilt & makyaj', d: 'Her hizmette ölçülebilir bir fark.' },
+  { t: 'Şeffaf süreç', d: 'Öncesi ve sonrası, hiçbir filtre olmadan.' },
+];
+---
+<section id="oncesi-sonrasi" class="bg-grain relative bg-cream-soft py-24 lg:py-32">
+  <div class="container-lux grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+    <div>
+      <span class="eyebrow inline-flex items-center gap-2" data-reveal>
+        <span class="h-px w-7 bg-blush/60"></span>Öncesi · Sonrası
+      </span>
+      <h2 class="display-2 mt-4" data-reveal>
+        Aradaki farkı <span class="accent-italic">kendiniz</span> kaydırın
+      </h2>
+      <p class="mt-5 max-w-md text-lg leading-relaxed text-mocha-soft" data-reveal>
+        Tutamacı sağa-sola sürükleyerek dönüşümü kendi gözlerinizle görün.
+        Lume’de her uygulama, ışıltıyı ortaya çıkarmak için tasarlanır.
+      </p>
+
+      <ul class="mt-8 space-y-4">
+        {points.map((p) => (
+          <li class="flex gap-3" data-reveal>
+            <span class="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-blush/15 text-blush-deep">
+              <Icon name="check" class="h-4 w-4" />
+            </span>
+            <span>
+              <span class="block font-medium text-espresso">{p.t}</span>
+              <span class="block text-sm text-mocha-soft">{p.d}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
+
+      <a href="/galeri" class="btn btn-primary mt-9" data-reveal>
+        Tüm Dönüşümler <Icon name="arrow" class="h-4 w-4" />
+      </a>
+    </div>
+
+    <div data-reveal>
+      <BeforeAfter id={feature.image} title={feature.title} category={feature.category} ratio="aspect-[4/5] sm:aspect-[4/3]" />
+    </div>
+  </div>
+</section>

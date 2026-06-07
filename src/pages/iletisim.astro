@@ -1,0 +1,158 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Icon from '../components/Icon.astro';
+import { SITE, waLink } from '../data/site';
+
+const contactCards = [
+  { icon: 'pin', label: 'Adres', value: SITE.address.full, href: 'https://maps.google.com/?q=Teşvikiye+Şişli+İstanbul' },
+  { icon: 'phone', label: 'Telefon', value: SITE.phoneDisplay, href: `tel:${SITE.phone}` },
+  { icon: 'mail', label: 'E-posta', value: SITE.email, href: `mailto:${SITE.email}` },
+  { icon: 'whatsapp', label: 'WhatsApp', value: 'Hemen yazın', href: waLink() },
+];
+const socials = [
+  { name: 'instagram', href: SITE.socials.instagram },
+  { name: 'pinterest', href: SITE.socials.pinterest },
+  { name: 'tiktok', href: SITE.socials.tiktok },
+  { name: 'facebook', href: SITE.socials.facebook },
+];
+const mapSrc = 'https://maps.google.com/maps?q=Te%C5%9Fvikiye%20%C5%9Ei%C5%9Fli%20%C4%B0stanbul&t=&z=14&ie=UTF8&iwloc=&output=embed';
+---
+<Layout title="İletişim" description="Lume Beauty Studio iletişim — adres, telefon, çalışma saatleri ve mesaj formu.">
+  <PageHeader
+    crumb="İletişim"
+    eyebrow="Bize Ulaşın"
+    title="Her zaman bir <span class='accent-italic'>merhaba</span> uzağınızdayız"
+    intro="Sorularınız, randevu talepleriniz ya da yalnızca merhaba demek için; size en uygun kanaldan bize ulaşın."
+  />
+
+  <!-- iletişim kartları -->
+  <section class="container-lux py-12">
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {contactCards.map((c) => (
+        <a
+          href={c.href}
+          target={c.href.startsWith('http') ? '_blank' : undefined}
+          rel={c.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+          class="card-soft group flex flex-col gap-3 p-6 transition-transform duration-300 hover:-translate-y-1.5"
+          data-reveal
+        >
+          <span class="grid h-12 w-12 place-items-center rounded-full bg-blush/15 text-blush-deep transition-colors group-hover:bg-blush group-hover:text-white">
+            <Icon name={c.icon} class="h-6 w-6" />
+          </span>
+          <span class="text-xs uppercase tracking-[0.18em] text-mocha-soft">{c.label}</span>
+          <span class="font-medium text-espresso">{c.value}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="container-lux pb-20 lg:pb-28">
+    <div class="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+      <!-- form -->
+      <div class="card-soft p-7 lg:p-9" data-reveal>
+        <h2 class="font-serif text-2xl text-espresso">Bize mesaj gönderin</h2>
+        <p class="mt-1 text-sm text-mocha-soft">Formu doldurun, en kısa sürede size dönüş yapalım.</p>
+
+        <form id="contact-form" class="mt-6 grid gap-4 sm:grid-cols-2" novalidate>
+          <div>
+            <label for="c-name" class="mb-2 block text-sm font-medium text-mocha">Ad Soyad *</label>
+            <input id="c-name" name="name" type="text" class="w-full rounded-2xl border border-blush/20 bg-white/60 px-4 py-3.5 text-mocha outline-none transition-all focus:border-blush focus:ring-2 focus:ring-blush/25" />
+            <p class="c-err mt-1.5 hidden text-xs text-red-500"></p>
+          </div>
+          <div>
+            <label for="c-phone" class="mb-2 block text-sm font-medium text-mocha">Telefon *</label>
+            <input id="c-phone" name="phone" type="tel" class="w-full rounded-2xl border border-blush/20 bg-white/60 px-4 py-3.5 text-mocha outline-none transition-all focus:border-blush focus:ring-2 focus:ring-blush/25" />
+            <p class="c-err mt-1.5 hidden text-xs text-red-500"></p>
+          </div>
+          <div class="sm:col-span-2">
+            <label for="c-email" class="mb-2 block text-sm font-medium text-mocha">E-posta</label>
+            <input id="c-email" name="email" type="email" class="w-full rounded-2xl border border-blush/20 bg-white/60 px-4 py-3.5 text-mocha outline-none transition-all focus:border-blush focus:ring-2 focus:ring-blush/25" />
+            <p class="c-err mt-1.5 hidden text-xs text-red-500"></p>
+          </div>
+          <div class="sm:col-span-2">
+            <label for="c-msg" class="mb-2 block text-sm font-medium text-mocha">Mesajınız *</label>
+            <textarea id="c-msg" name="message" rows="4" class="w-full resize-none rounded-2xl border border-blush/20 bg-white/60 px-4 py-3.5 text-mocha outline-none transition-all focus:border-blush focus:ring-2 focus:ring-blush/25"></textarea>
+            <p class="c-err mt-1.5 hidden text-xs text-red-500"></p>
+          </div>
+          <div class="sm:col-span-2 flex items-center justify-between gap-4">
+            <button type="submit" class="btn btn-primary">Gönder <Icon name="arrow" class="h-4 w-4" /></button>
+            <p id="contact-ok" class="hidden items-center gap-2 text-sm text-green-600 sm:flex">
+              <Icon name="check" class="h-4 w-4" /> Mesajınız alındı! (demo)
+            </p>
+          </div>
+        </form>
+      </div>
+
+      <!-- yan bilgi + saatler + harita -->
+      <div class="flex flex-col gap-6" data-reveal>
+        <div class="card-soft p-7">
+          <h3 class="flex items-center gap-2 font-serif text-xl text-espresso">
+            <Icon name="clock" class="h-5 w-5 text-blush-deep" /> Çalışma Saatleri
+          </h3>
+          <ul class="mt-4 space-y-2.5 text-sm">
+            {SITE.hours.map((h) => (
+              <li class="flex items-center justify-between border-b border-blush/10 pb-2.5 last:border-0">
+                <span class="text-mocha-soft">{h.day}</span>
+                <span class="font-medium text-espresso">{h.time}</span>
+              </li>
+            ))}
+          </ul>
+          <div class="mt-5 flex gap-2.5">
+            {socials.map((s) => (
+              <a href={s.href} target="_blank" rel="noopener noreferrer" class="grid h-10 w-10 place-items-center rounded-full border border-blush/20 text-blush-deep transition-all hover:border-blush hover:bg-blush hover:text-white" aria-label={s.name}>
+                <Icon name={s.name} class="h-4.5 w-4.5" />
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div class="card-soft overflow-hidden">
+          <iframe
+            title="Lume Beauty Studio konum"
+            src={mapSrc}
+            class="h-64 w-full border-0 grayscale-[0.2]"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  if (form) {
+    const fields = [
+      { id: 'c-name', test: (v: string) => v.trim().length >= 2, msg: 'Lütfen adınızı girin.' },
+      { id: 'c-phone', test: (v: string) => v.replace(/\D/g, '').length >= 10, msg: 'Geçerli bir telefon girin.' },
+      { id: 'c-email', test: (v: string) => v === '' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v), msg: 'Geçerli bir e-posta girin.' },
+      { id: 'c-msg', test: (v: string) => v.trim().length >= 5, msg: 'Lütfen mesajınızı yazın.' },
+    ];
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      let ok = true;
+      fields.forEach((f) => {
+        const input = document.getElementById(f.id) as HTMLInputElement;
+        const err = input.parentElement?.querySelector('.c-err') as HTMLElement;
+        if (!f.test(input.value)) {
+          err.textContent = f.msg;
+          err.classList.remove('hidden');
+          input.classList.add('!border-red-400');
+          ok = false;
+        } else {
+          err.classList.add('hidden');
+          input.classList.remove('!border-red-400');
+        }
+      });
+      if (ok) {
+        form.reset();
+        const okMsg = document.getElementById('contact-ok');
+        okMsg?.classList.remove('hidden');
+        okMsg?.classList.add('flex');
+        setTimeout(() => { okMsg?.classList.add('hidden'); okMsg?.classList.remove('flex'); }, 5000);
+      }
+    });
+  }
+</script>

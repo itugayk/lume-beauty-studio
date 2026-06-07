@@ -1,0 +1,155 @@
+---
+import Figure from './Figure.astro';
+import Icon from './Icon.astro';
+
+interface Props {
+  id: string;
+  title?: string;
+  category?: string;
+  alt?: string;
+  ratio?: string; // tailwind aspect class
+  eager?: boolean;
+  class?: string;
+}
+const {
+  id,
+  title,
+  category,
+  alt = 'Öncesi ve sonrası karşılaştırması',
+  ratio = 'aspect-[4/3]',
+  eager = false,
+  class: cls = '',
+} = Astro.props;
+---
+<figure
+  class={`ba group relative ${ratio} w-full select-none overflow-hidden rounded-[1.75rem] shadow-[0_40px_80px_-50px_rgba(90,66,52,0.6)] ${cls}`}
+  data-ba
+>
+  <!-- SONRASI (tam renk, alt katman) -->
+  <div class="ba-layer absolute inset-0">
+    <Figure id={id} alt={`${alt} — sonrası`} w={1100} h={820} eager={eager} class="h-full w-full" />
+    <span class="absolute bottom-4 right-4 z-10 rounded-full bg-blush/90 px-3 py-1 text-[0.7rem] font-medium uppercase tracking-[0.15em] text-white shadow-sm">
+      Sonrası
+    </span>
+  </div>
+
+  <!-- ÖNCESİ (mat, üst katman, kırpılır) -->
+  <div class="ba-before absolute inset-0" style="clip-path: inset(0 50% 0 0)">
+    <Figure id={id} alt={`${alt} — öncesi`} w={1100} h={820} eager={eager} class="h-full w-full" imgClass="ba-dull" />
+    <span class="absolute bottom-4 left-4 z-10 rounded-full bg-espresso/80 px-3 py-1 text-[0.7rem] font-medium uppercase tracking-[0.15em] text-cream shadow-sm">
+      Öncesi
+    </span>
+  </div>
+
+  <!-- TUTAMAÇ -->
+  <button
+    type="button"
+    class="ba-handle absolute top-0 bottom-0 z-20 -ml-px w-0.5 bg-white/90 shadow-[0_0_0_1px_rgba(90,66,52,0.15)] outline-none"
+    style="left:50%"
+    role="slider"
+    aria-label="Öncesi/sonrası kaydırıcı"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    aria-valuenow="50"
+  >
+    <span class="absolute left-1/2 top-1/2 grid h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white text-mocha shadow-lg ring-1 ring-black/5 transition-transform duration-300 group-hover:scale-110">
+      <span class="flex items-center gap-0.5">
+        <Icon name="chevron" class="h-4 w-4 rotate-90" />
+        <Icon name="chevron" class="h-4 w-4 -rotate-90" />
+      </span>
+    </span>
+  </button>
+
+  {(title || category) && (
+    <figcaption class="pointer-events-none absolute left-4 top-4 z-10">
+      {category && (
+        <span class="rounded-full bg-cream/85 px-3 py-1 text-[0.65rem] font-medium uppercase tracking-[0.18em] text-blush-deep backdrop-blur">
+          {category}
+        </span>
+      )}
+      {title && <p class="mt-2 max-w-[14rem] font-serif text-lg leading-tight text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]">{title}</p>}
+    </figcaption>
+  )}
+</figure>
+
+<style>
+  /* "öncesi" görünümü: mat, soğuk, az doygun */
+  :global(.ba-dull) {
+    filter: saturate(0.5) brightness(1.03) contrast(0.9) sepia(0.06);
+  }
+  .ba { touch-action: pan-y; cursor: ew-resize; }
+  .ba-handle:focus-visible span {
+    outline: 2px solid var(--color-blush);
+    outline-offset: 3px;
+  }
+</style>
+
+<script>
+  const init = (el: HTMLElement) => {
+    const before = el.querySelector('.ba-before') as HTMLElement;
+    const handle = el.querySelector('.ba-handle') as HTMLElement;
+    if (!before || !handle) return;
+
+    let dragging = false;
+
+    const setPos = (clientX: number) => {
+      const rect = el.getBoundingClientRect();
+      let pct = ((clientX - rect.left) / rect.width) * 100;
+      pct = Math.max(0, Math.min(100, pct));
+      before.style.clipPath = `inset(0 ${100 - pct}% 0 0)`;
+      handle.style.left = `${pct}%`;
+      handle.setAttribute('aria-valuenow', String(Math.round(pct)));
+    };
+
+    const onMove = (e: PointerEvent) => {
+      if (!dragging) return;
+      setPos(e.clientX);
+    };
+    const stop = () => {
+      dragging = false;
+      document.removeEventListener('pointermove', onMove);
+      document.removeEventListener('pointerup', stop);
+    };
+    const start = (e: PointerEvent) => {
+      dragging = true;
+      setPos(e.clientX);
+      document.addEventListener('pointermove', onMove);
+      document.addEventListener('pointerup', stop);
+    };
+
+    el.addEventListener('pointerdown', start);
+
+    // klavye desteği
+    handle.addEventListener('keydown', (e: KeyboardEvent) => {
+      const cur = parseFloat(handle.style.left) || 50;
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        const rect = el.getBoundingClientRect();
+        setPos(rect.left + (rect.width * (cur - 3)) / 100);
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        const rect = el.getBoundingClientRect();
+        setPos(rect.left + (rect.width * (cur + 3)) / 100);
+      }
+    });
+
+    // ilk girişte küçük ipucu animasyonu
+    let teased = false;
+    const tease = () => {
+      if (teased) return;
+      teased = true;
+      const rect = el.getBoundingClientRect();
+      const seq = [62, 40, 50];
+      seq.forEach((p, i) => {
+        setTimeout(() => setPos(rect.left + (rect.width * p) / 100), 400 + i * 320);
+      });
+    };
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((en) => en.isIntersecting && tease()),
+      { threshold: 0.5 },
+    );
+    io.observe(el);
+  };
+
+  document.querySelectorAll<HTMLElement>('[data-ba]').forEach(init);
+</script>

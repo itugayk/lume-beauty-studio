@@ -1,0 +1,104 @@
+---
+import Icon from './Icon.astro';
+import Figure from './Figure.astro';
+import SectionHeading from './SectionHeading.astro';
+import { SERVICES } from '../data/services';
+---
+<section id="hizmetler" class="relative py-24 lg:py-32">
+  <div class="container-lux">
+    <div class="flex flex-col items-end justify-between gap-6 md:flex-row md:items-end">
+      <SectionHeading
+        align="left"
+        eyebrow="Hizmetlerimiz"
+        title="Her detayında <span class='accent-italic'>özen</span> olan<br/>bakım hizmetleri"
+        intro="Saçtan cilde, makyajdan tırnağa; alanında uzman ekibimizle size özel hazırlanan dört ana hizmet başlığı."
+      />
+      <a href="/hizmetler" class="btn btn-ghost shrink-0" data-reveal>
+        Tüm Hizmetler <Icon name="arrowUpRight" class="h-4 w-4" />
+      </a>
+    </div>
+
+    <div class="mt-14 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+      {SERVICES.map((s) => (
+        <article
+          class="svc-card group relative cursor-pointer overflow-hidden rounded-[1.75rem] shadow-[0_30px_60px_-45px_rgba(90,66,52,0.6)]"
+          data-reveal
+          data-service-card
+        >
+          <a href={`/hizmetler#${s.slug}`} class="absolute inset-0 z-30" aria-label={`${s.name} hizmetleri`}></a>
+          <Figure
+            id={s.image}
+            alt={`${s.name} hizmeti`}
+            w={520}
+            h={680}
+            class="aspect-[3/4]"
+            imgClass="transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110"
+            gradient={s.accent}
+          />
+          <!-- degrade örtü -->
+          <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-espresso/85 via-espresso/25 to-transparent transition-opacity duration-500 group-hover:from-espresso/90"></div>
+
+          <div class="absolute inset-x-0 bottom-0 z-20 p-6">
+            <span class="svc-icon grid h-12 w-12 place-items-center rounded-full bg-white/15 text-cream backdrop-blur-md transition-all duration-500 group-hover:bg-blush group-hover:text-white">
+              <Icon name={s.icon} class="h-6 w-6" />
+            </span>
+            <h3 class="mt-4 font-serif text-2xl text-cream">{s.name}</h3>
+            <p class="text-sm tracking-wide text-cream/70">{s.tagline}</p>
+
+            <div class="svc-detail">
+              <p class="pt-3 text-sm leading-relaxed text-cream/80">{s.description}</p>
+              <ul class="mt-3 space-y-1.5">
+                {s.items.slice(0, 3).map((it) => (
+                  <li class="flex items-center gap-2 text-xs text-cream/75">
+                    <Icon name="check" class="h-3.5 w-3.5 text-blush-soft" /> {it.name}
+                  </li>
+                ))}
+              </ul>
+              <span class="mt-4 inline-flex items-center gap-1.5 text-xs font-medium uppercase tracking-[0.15em] text-blush-soft">
+                Detayları gör <Icon name="arrow" class="h-3.5 w-3.5" />
+              </span>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .svc-detail {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: grid-template-rows 0.6s var(--ease-lux), opacity 0.5s ease, transform 0.5s var(--ease-lux);
+  }
+  .svc-detail > * { overflow: hidden; }
+  .svc-card:hover .svc-detail,
+  .svc-card.is-open .svc-detail {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .svc-card:hover .svc-icon,
+  .svc-card.is-open .svc-icon {
+    transform: rotate(-8deg) scale(1.08);
+  }
+</style>
+
+<script>
+  // dokunmatik cihazlarda dokununca aç/kapat (ilk dokunuş bağlantıyı izlemez)
+  const isTouch = window.matchMedia('(hover: none)').matches;
+  if (isTouch) {
+    document.querySelectorAll('[data-service-card]').forEach((card) => {
+      const link = card.querySelector('a');
+      link?.addEventListener('click', (e) => {
+        if (!card.classList.contains('is-open')) {
+          e.preventDefault();
+          document.querySelectorAll('[data-service-card].is-open').forEach((c) => c.classList.remove('is-open'));
+          card.classList.add('is-open');
+        }
+      });
+    });
+  }
+</script>

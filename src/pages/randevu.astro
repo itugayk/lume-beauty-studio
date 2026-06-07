@@ -1,0 +1,35 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import AppointmentForm from '../components/AppointmentForm.astro';
+import Icon from '../components/Icon.astro';
+import { SITE, waLink } from '../data/site';
+---
+<Layout title="Randevu" description="Lume Beauty Studio online randevu — hizmet, uzman, tarih ve saat seçerek birkaç adımda randevunuzu oluşturun.">
+  <PageHeader
+    crumb="Randevu"
+    eyebrow="Online Randevu"
+    title="Birkaç adımda <span class='accent-italic'>randevunuzu</span> oluşturun"
+    intro="Hizmetinizi, uzmanınızı ve zamanınızı seçin; gerisini bize bırakın."
+  />
+
+  <section class="container-lux py-14 lg:py-20">
+    <AppointmentForm />
+
+    <!-- alternatif iletişim -->
+    <div class="mx-auto mt-14 grid max-w-4xl gap-4 sm:grid-cols-3" data-reveal>
+      <a href={`tel:${SITE.phone}`} class="card-soft flex items-center gap-3 px-5 py-4 transition-transform duration-300 hover:-translate-y-1">
+        <span class="grid h-10 w-10 place-items-center rounded-full bg-blush/15 text-blush-deep"><Icon name="phone" class="h-5 w-5" /></span>
+        <span><span class="block text-xs text-mocha-soft">Telefon</span><span class="text-sm font-medium text-espresso">{SITE.phoneDisplay}</span></span>
+      </a>
+      <a href={waLink()} target="_blank" rel="noopener noreferrer" class="card-soft flex items-center gap-3 px-5 py-4 transition-transform duration-300 hover:-translate-y-1">
+        <span class="grid h-10 w-10 place-items-center rounded-full bg-[#25D366]/15 text-[#1da851]"><Icon name="whatsapp" class="h-5 w-5" /></span>
+        <span><span class="block text-xs text-mocha-soft">WhatsApp</span><span class="text-sm font-medium text-espresso">Hızlı yazışma</span></span>
+      </a>
+      <div class="card-soft flex items-center gap-3 px-5 py-4">
+        <span class="grid h-10 w-10 place-items-center rounded-full bg-blush/15 text-blush-deep"><Icon name="clock" class="h-5 w-5" /></span>
+        <span><span class="block text-xs text-mocha-soft">Çalışma Saatleri</span><span class="text-sm font-medium text-espresso">{SITE.hours[0].time}</span></span>
+      </div>
+    </div>
+  </section>
+</Layout>

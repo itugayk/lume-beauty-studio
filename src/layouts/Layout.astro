@@ -1,0 +1,140 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import { SITE } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  bodyClass?: string;
+}
+const {
+  title,
+  description = SITE.description,
+  bodyClass = '',
+} = Astro.props;
+
+const pageTitle = title ? `${title} · ${SITE.name}` : `${SITE.name} — ${SITE.tagline}`;
+const canonical = new URL(Astro.url.pathname, SITE.url).href;
+
+const favicon =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23c9a0a0'/%3E%3Cpath d='M16 7c-3 4.5-6 6.8-6 10.5a6 6 0 0 0 12 0C22 13.8 19 11.5 16 7Z' fill='none' stroke='%23fdf8f4' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E";
+---
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href={favicon} />
+    <link rel="canonical" href={canonical} />
+
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#fdf8f4" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Marcellus&family=Poppins:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <noscript>
+      <style>[data-reveal]{opacity:1 !important;}</style>
+    </noscript>
+  </head>
+  <body class={bodyClass}>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+    <WhatsAppButton />
+
+    <script>
+      import gsap from 'gsap';
+      import ScrollTrigger from 'gsap/ScrollTrigger';
+      import Lenis from 'lenis';
+
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      document.documentElement.classList.add('reveal-ready');
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      // ── Lenis pürüzsüz kaydırma ───────────────────────────────
+      let lenis: any = null;
+      if (!reduce) {
+        lenis = new Lenis({
+          duration: 1.15,
+          easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          smoothWheel: true,
+        });
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => lenis.raf(time * 1000));
+        gsap.ticker.lagSmoothing(0);
+        document.documentElement.classList.add('lenis');
+      }
+
+      // ── Sayfa içi çapa bağlantıları ──────────────────────────
+      document.querySelectorAll('a[href^="#"]').forEach((a) => {
+        a.addEventListener('click', (e) => {
+          const id = a.getAttribute('href');
+          if (!id || id === '#') return;
+          const target = document.querySelector(id);
+          if (!target) return;
+          e.preventDefault();
+          if (lenis) lenis.scrollTo(target as HTMLElement, { offset: -90 });
+          else (target as HTMLElement).scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      // ── Scroll reveal (batch → doğal stagger) ─────────────────
+      try {
+        if (reduce) {
+          gsap.set('[data-reveal]', { opacity: 1, y: 0 });
+        } else {
+          gsap.set('[data-reveal]', { opacity: 0, y: 34 });
+          ScrollTrigger.batch('[data-reveal]', {
+            start: 'top 90%',
+            once: true,
+            onEnter: (batch) =>
+              gsap.to(batch, {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                ease: 'power3.out',
+                stagger: 0.09,
+                overwrite: true,
+              }),
+          });
+          // güvenlik: 3 sn sonra hâlâ gizli kalan varsa görünür yap
+          setTimeout(() => {
+            document.querySelectorAll<HTMLElement>('[data-reveal]').forEach((el) => {
+              if (getComputedStyle(el).opacity === '0') el.style.opacity = '1';
+            });
+            ScrollTrigger.refresh();
+          }, 3000);
+        }
+      } catch (err) {
+        document.querySelectorAll<HTMLElement>('[data-reveal]').forEach(
+          (el) => (el.style.opacity = '1'),
+        );
+      }
+
+      // görseller yüklendikçe tetikleyicileri tazele
+      window.addEventListener('load', () => ScrollTrigger.refresh());
+    </script>
+  </body>
+</html>

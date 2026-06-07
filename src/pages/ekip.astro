@@ -1,0 +1,48 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Team from '../components/Team.astro';
+import Icon from '../components/Icon.astro';
+import CTABand from '../components/CTABand.astro';
+import { TEAM } from '../data/team';
+
+const values = [
+  { icon: 'leaf', title: 'Özenli Yaklaşım', desc: 'Her misafirimizi dinler, beklentiye ve cilde/saça özel çözüm sunarız.' },
+  { icon: 'sparkle', title: 'Hijyen & Güven', desc: 'Steril ekipman ve tek kullanımlık ürünlerle güvenli bir deneyim.' },
+  { icon: 'scissors', title: 'Sürekli Eğitim', desc: 'Ekibimiz güncel teknik ve trendleri takip ederek kendini geliştirir.' },
+];
+---
+<Layout title="Ekip" description="Lume Beauty Studio uzman ekibi: saç tasarımcıları, cilt uzmanları, makyaj sanatçıları ve nail artist.">
+  <PageHeader
+    crumb="Ekip"
+    eyebrow="Tanışalım"
+    title="Lume’nin <span class='accent-italic'>usta</span> elleri"
+    intro="Alanında deneyimli, tutkulu ve sürekli kendini geliştiren bir ekip. İşte sizi ışıldatacak isimler."
+  />
+
+  <Team
+    members={TEAM}
+    eyebrow="Uzman Kadro"
+    title="Her hizmette bir <span class='accent-italic'>uzman</span>"
+    intro="Saçtan tırnağa, her alanda işinin ehli sanatçılarla çalışıyoruz."
+    showCta={false}
+    cols="sm:grid-cols-2 lg:grid-cols-3"
+  />
+
+  <!-- değerler -->
+  <section class="container-lux py-12 lg:py-20">
+    <div class="grid gap-5 md:grid-cols-3">
+      {values.map((v) => (
+        <div class="card-soft p-8" data-reveal>
+          <span class="grid h-12 w-12 place-items-center rounded-full bg-blush/15 text-blush-deep">
+            <Icon name={v.icon} class="h-6 w-6" />
+          </span>
+          <h3 class="mt-5 font-serif text-xl text-espresso">{v.title}</h3>
+          <p class="mt-2 text-sm leading-relaxed text-mocha-soft">{v.desc}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <CTABand />
+</Layout>

@@ -1,0 +1,26 @@
+---
+import Icon from './Icon.astro';
+import { waLink } from '../data/site';
+---
+<a
+  href={waLink()}
+  target="_blank"
+  rel="noopener noreferrer"
+  class="group fixed bottom-5 right-5 z-50 flex items-center gap-0 overflow-hidden rounded-full bg-[#25D366] py-3.5 pl-3.5 pr-3.5 text-white shadow-[0_14px_34px_-10px_rgba(37,211,102,0.7)] transition-all duration-500 hover:pr-5 sm:bottom-7 sm:right-7"
+  aria-label="WhatsApp ile randevu al"
+  data-wa
+>
+  <span class="absolute inset-0 rounded-full bg-[#25D366] opacity-60 animate-ping-slow"></span>
+  <Icon name="whatsapp" class="relative h-6 w-6 shrink-0" stroke={1.6} />
+  <span class="relative max-w-0 overflow-hidden whitespace-nowrap text-sm font-medium opacity-0 transition-all duration-500 group-hover:ml-2 group-hover:max-w-[160px] group-hover:opacity-100">
+    Randevu Al
+  </span>
+</a>
+
+<style>
+  @keyframes ping-slow {
+    0% { transform: scale(1); opacity: 0.55; }
+    70%, 100% { transform: scale(1.6); opacity: 0; }
+  }
+  .animate-ping-slow { animation: ping-slow 2.6s cubic-bezier(0, 0, 0.2, 1) infinite; }
+</style>

@@ -1,0 +1,157 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { NAV, SITE } from '../data/site';
+
+const path = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === '/' ? path === '/' : path.startsWith(href);
+---
+<header
+  id="site-header"
+  class="fixed inset-x-0 top-0 z-50 transition-all duration-500"
+  data-header
+>
+  <div class="container-lux">
+    <div
+      class="mt-3 flex items-center justify-between rounded-full px-4 py-2.5 transition-all duration-500 lg:px-6"
+      data-header-bar
+    >
+      <Logo />
+
+      <nav class="hidden items-center gap-1 lg:flex" aria-label="Ana menü">
+        {NAV.map((item) => (
+          <a
+            href={item.href}
+            class:list={[
+              'relative px-3.5 py-2 text-sm tracking-wide transition-colors duration-300',
+              isActive(item.href)
+                ? 'text-espresso'
+                : 'text-mocha-soft hover:text-espresso',
+            ]}
+          >
+            {item.label}
+            {isActive(item.href) && (
+              <span class="absolute inset-x-3 -bottom-0.5 h-px bg-blush"></span>
+            )}
+          </a>
+        ))}
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <a
+          href={`tel:${SITE.phone}`}
+          class="hidden items-center gap-2 text-sm text-mocha-soft transition-colors hover:text-espresso xl:flex"
+        >
+          <Icon name="phone" class="h-4 w-4" />
+          <span>{SITE.phoneDisplay}</span>
+        </a>
+        <a href="/randevu" class="btn btn-primary hidden !px-6 !py-3 sm:inline-flex">
+          Randevu Al
+        </a>
+        <button
+          type="button"
+          class="grid h-11 w-11 place-items-center rounded-full bg-white/70 text-espresso shadow-sm backdrop-blur lg:hidden"
+          data-menu-open
+          aria-label="Menüyü aç"
+        >
+          <Icon name="menu" class="h-5 w-5" />
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Mobil menü -->
+<div
+  class="fixed inset-0 z-[60] hidden bg-espresso/95 backdrop-blur-xl"
+  data-menu-panel
+>
+  <div class="container-lux flex h-full flex-col">
+    <div class="flex items-center justify-between py-5">
+      <span class="font-display text-xl tracking-[0.18em] text-cream">LUME</span>
+      <button
+        type="button"
+        class="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-cream"
+        data-menu-close
+        aria-label="Menüyü kapat"
+      >
+        <Icon name="close" class="h-5 w-5" />
+      </button>
+    </div>
+    <nav class="mt-6 flex flex-col gap-1" aria-label="Mobil menü">
+      {NAV.map((item, i) => (
+        <a
+          href={item.href}
+          class="group flex items-center justify-between border-b border-white/10 py-4 font-serif text-3xl text-cream/90 transition-colors hover:text-blush-soft"
+          data-menu-link
+          style={`transition-delay:${i * 40}ms`}
+        >
+          <span>{item.label}</span>
+          <Icon name="arrowUpRight" class="h-6 w-6 opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0" />
+        </a>
+      ))}
+    </nav>
+    <div class="mt-auto flex flex-col gap-4 py-8">
+      <a href="/randevu" class="btn btn-blush w-full" data-menu-link>Hemen Randevu Al</a>
+      <a href={`tel:${SITE.phone}`} class="flex items-center gap-2 text-cream/70">
+        <Icon name="phone" class="h-4 w-4" /> {SITE.phoneDisplay}
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const header = document.querySelector('[data-header]');
+  const bar = document.querySelector('[data-header-bar]');
+  const onScroll = () => {
+    const scrolled = window.scrollY > 24;
+    bar?.classList.toggle('header-scrolled', scrolled);
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  const panel = document.querySelector('[data-menu-panel]');
+  const openBtn = document.querySelector('[data-menu-open]');
+  const closeBtn = document.querySelector('[data-menu-close]');
+  const links = document.querySelectorAll('[data-menu-link]');
+
+  const open = () => {
+    panel?.classList.remove('hidden');
+    requestAnimationFrame(() => panel?.classList.add('menu-active'));
+    document.documentElement.style.overflow = 'hidden';
+  };
+  const close = () => {
+    panel?.classList.remove('menu-active');
+    document.documentElement.style.overflow = '';
+    setTimeout(() => panel?.classList.add('hidden'), 400);
+  };
+  openBtn?.addEventListener('click', open);
+  closeBtn?.addEventListener('click', close);
+  links.forEach((l) => l.addEventListener('click', close));
+</script>
+
+<style>
+  [data-header-bar].header-scrolled {
+    background: rgba(253, 248, 244, 0.82);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 14px 40px -28px rgba(90, 66, 52, 0.5);
+  }
+
+  [data-menu-panel] {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  [data-menu-panel].menu-active {
+    opacity: 1;
+  }
+  [data-menu-panel] [data-menu-link] {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.5s var(--ease-lux), transform 0.5s var(--ease-lux);
+  }
+  [data-menu-panel].menu-active [data-menu-link] {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>

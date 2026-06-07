@@ -1,0 +1,70 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import BeforeAfter from '../components/BeforeAfter.astro';
+import InstagramGrid from '../components/InstagramGrid.astro';
+import CTABand from '../components/CTABand.astro';
+import { BEFORE_AFTER } from '../data/gallery';
+
+const categories = ['Tümü', ...Array.from(new Set(BEFORE_AFTER.map((b) => b.category)))];
+---
+<Layout title="Galeri" description="Lume Beauty Studio öncesi/sonrası galerisi. Saç, cilt ve makyaj dönüşümlerini kaydırarak keşfedin.">
+  <PageHeader
+    crumb="Galeri"
+    eyebrow="Öncesi · Sonrası"
+    title="Dönüşümleri <span class='accent-italic'>kaydırarak</span> keşfedin"
+    intro="Tutamacı sürükleyerek farkı kendiniz görün. İzinli paylaşılan gerçek misafir sonuçları."
+  />
+
+  <section class="container-lux py-16 lg:py-24">
+    <!-- filtre -->
+    <div class="mb-10 flex flex-wrap justify-center gap-2" data-reveal>
+      {categories.map((c, i) => (
+        <button
+          type="button"
+          class:list={[
+            'ba-filter rounded-full border px-5 py-2 text-sm transition-all duration-300',
+            i === 0 ? 'border-blush bg-blush text-white' : 'border-blush/20 text-mocha hover:border-blush',
+          ]}
+          data-filter={c}
+        >
+          {c}
+        </button>
+      ))}
+    </div>
+
+    <div class="grid gap-6 md:grid-cols-2">
+      {BEFORE_AFTER.map((b) => (
+        <div class="ba-item" data-category={b.category} data-reveal>
+          <BeforeAfter id={b.image} title={b.title} category={b.category} ratio="aspect-[4/3]" />
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <InstagramGrid />
+  <CTABand />
+</Layout>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const items = document.querySelectorAll<HTMLElement>('.ba-item');
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const cat = btn.dataset.filter;
+      buttons.forEach((b) => {
+        const active = b === btn;
+        b.classList.toggle('border-blush', active);
+        b.classList.toggle('bg-blush', active);
+        b.classList.toggle('text-white', active);
+        b.classList.toggle('border-blush/20', !active);
+        b.classList.toggle('text-mocha', !active);
+      });
+      items.forEach((it) => {
+        const show = cat === 'Tümü' || it.dataset.category === cat;
+        it.style.display = show ? '' : 'none';
+      });
+    });
+  });
+</script>

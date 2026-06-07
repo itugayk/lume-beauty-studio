@@ -1,0 +1,36 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import PriceAccordion from '../components/PriceAccordion.astro';
+import Icon from '../components/Icon.astro';
+import CTABand from '../components/CTABand.astro';
+import { waLink } from '../data/site';
+---
+<Layout title="Fiyat Listesi" description="Lume Beauty Studio güncel fiyat listesi — saç, cilt bakımı, makyaj ve tırnak hizmetleri.">
+  <PageHeader
+    crumb="Fiyat Listesi"
+    eyebrow="Şeffaf Fiyatlandırma"
+    title="Fiyat <span class='accent-italic'>listesi</span>"
+    intro="Kategoriye dokunarak hizmet fiyatlarımızı görüntüleyin. Detaylı bilgi için bize her zaman ulaşabilirsiniz."
+  />
+
+  <section class="container-lux py-16 lg:py-24">
+    <PriceAccordion />
+
+    <div class="mx-auto mt-10 flex max-w-3xl flex-col items-center gap-4 rounded-[1.5rem] border border-blush/15 bg-powder/40 px-6 py-8 text-center" data-reveal>
+      <Icon name="sparkle" class="h-6 w-6 text-gold" />
+      <p class="max-w-md text-sm text-mocha-soft">
+        Fiyatlar bilgilendirme amaçlıdır; saç uzunluğu, yoğunluk ve uygulama detayına göre
+        değişiklik gösterebilir. Net fiyat için ücretsiz ön görüşme alın.
+      </p>
+      <div class="flex flex-wrap justify-center gap-3">
+        <a href="/randevu" class="btn btn-primary">Randevu Al</a>
+        <a href={waLink('Merhaba, fiyatlar hakkında bilgi almak istiyorum.')} target="_blank" rel="noopener noreferrer" class="btn btn-ghost">
+          <Icon name="whatsapp" class="h-4 w-4" /> WhatsApp'tan Sor
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <CTABand />
+</Layout>

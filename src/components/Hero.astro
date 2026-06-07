@@ -1,0 +1,202 @@
+---
+import Icon from './Icon.astro';
+import Figure from './Figure.astro';
+import { IMG } from '../lib/images';
+---
+<section class="bg-grain relative overflow-hidden pt-32 pb-16 lg:pt-40 lg:pb-24">
+  <!-- yumuşak ışık blobları -->
+  <div class="pointer-events-none absolute inset-0 -z-10">
+    <div class="absolute -left-20 top-10 h-72 w-72 rounded-full bg-blush-soft/40 blur-3xl animate-float"></div>
+    <div class="absolute right-0 top-1/3 h-96 w-96 rounded-full bg-gold-soft/40 blur-3xl"></div>
+    <div class="absolute bottom-0 left-1/3 h-80 w-80 rounded-full bg-powder-deep/60 blur-3xl"></div>
+  </div>
+  <!-- ince partikül / ışık efekti -->
+  <canvas id="hero-particles" class="pointer-events-none absolute inset-0 -z-10 h-full w-full"></canvas>
+
+  <div class="container-lux grid items-center gap-14 lg:grid-cols-[1.05fr_0.95fr]">
+    <!-- metin -->
+    <div class="relative">
+      <span class="eyebrow inline-flex items-center gap-2" data-hero>
+        <Icon name="sparkle" class="h-4 w-4 text-gold" />
+        Şişli · Premium Güzellik Stüdyosu
+      </span>
+
+      <h1 class="display-1 mt-6">
+        <span class="block" data-hero>Işıltını</span>
+        <span class="block" data-hero>ortaya çıkaran</span>
+        <span class="block" data-hero><span class="accent-italic">bakım sanatı.</span></span>
+      </h1>
+
+      <p class="mt-7 max-w-md text-lg leading-relaxed text-mocha-soft" data-hero>
+        Saç, cilt bakımı, makyaj ve tırnakta uzman ellerden premium hizmet.
+        Lume Beauty Studio’da kendinize ayıracağınız zaman bir ritüele dönüşür.
+      </p>
+
+      <div class="mt-9 flex flex-wrap items-center gap-3" data-hero>
+        <a href="/randevu" class="btn btn-primary">
+          Randevu Al <Icon name="arrow" class="h-4 w-4" />
+        </a>
+        <a href="/hizmetler" class="btn btn-ghost">Hizmetleri Keşfet</a>
+      </div>
+
+      <!-- güven göstergeleri -->
+      <div class="mt-12 flex flex-wrap items-center gap-x-10 gap-y-5" data-hero>
+        <div class="flex items-center gap-3">
+          <div class="flex -space-x-3">
+            <span class="h-9 w-9 rounded-full border-2 border-cream bg-gradient-to-br from-blush to-blush-deep"></span>
+            <span class="h-9 w-9 rounded-full border-2 border-cream bg-gradient-to-br from-gold-soft to-gold"></span>
+            <span class="h-9 w-9 rounded-full border-2 border-cream bg-gradient-to-br from-powder-deep to-blush"></span>
+          </div>
+          <div class="leading-tight">
+            <div class="flex items-center gap-1 text-gold">
+              {Array.from({ length: 5 }).map(() => <Icon name="star" class="h-3.5 w-3.5" />)}
+            </div>
+            <p class="text-xs text-mocha-soft">1.200+ mutlu misafir</p>
+          </div>
+        </div>
+        <div class="h-10 w-px bg-blush/30"></div>
+        <div class="leading-tight">
+          <p class="font-serif text-2xl text-espresso">15+ yıl</p>
+          <p class="text-xs text-mocha-soft">uzman deneyimi</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- görsel -->
+    <div class="relative mx-auto w-full max-w-md" data-hero-visual>
+      <!-- dönen ince halka -->
+      <div class="absolute -inset-5 -z-10 animate-spin-slow">
+        <svg viewBox="0 0 100 100" class="h-full w-full opacity-50">
+          <circle cx="50" cy="50" r="48" fill="none" stroke="#c9a0a0" stroke-width="0.3" stroke-dasharray="1 3" />
+        </svg>
+      </div>
+
+      <Figure
+        id={IMG.heroPortrait}
+        alt="Lume Beauty Studio'da bakım yapılan bir misafir"
+        w={760}
+        h={920}
+        eager={true}
+        class="aspect-[4/5] rounded-[200px_200px_32px_32px] shadow-[0_50px_90px_-50px_rgba(90,66,52,0.6)]"
+        gradient="linear-gradient(160deg,#f6e9e3,#c9a0a0)"
+      />
+
+      <!-- yüzen kartlar -->
+      <div class="card-soft absolute -left-4 top-10 flex items-center gap-3 px-4 py-3 lg:-left-10" data-float-card>
+        <span class="grid h-10 w-10 place-items-center rounded-full bg-blush/15 text-blush-deep">
+          <Icon name="sparkle" class="h-5 w-5" />
+        </span>
+        <div class="leading-tight">
+          <p class="font-serif text-sm text-espresso">Hydrafacial</p>
+          <p class="text-[0.7rem] text-mocha-soft">Anında ışıltı</p>
+        </div>
+      </div>
+
+      <div class="card-soft absolute -right-3 bottom-12 px-4 py-3 lg:-right-8" data-float-card>
+        <div class="flex items-center gap-1 text-gold">
+          {Array.from({ length: 5 }).map(() => <Icon name="star" class="h-3.5 w-3.5" />)}
+        </div>
+        <p class="mt-1 font-serif text-lg leading-none text-espresso">4.9<span class="text-xs text-mocha-soft">/5</span></p>
+        <p class="text-[0.7rem] text-mocha-soft">Google puanı</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- aşağı kaydır -->
+  <div class="container-lux mt-14 hidden lg:block">
+    <div class="flex items-center gap-3 text-mocha-soft/70">
+      <span class="text-xs uppercase tracking-[0.3em]">Keşfet</span>
+      <span class="relative h-10 w-px overflow-hidden bg-blush/30">
+        <span class="absolute inset-x-0 top-0 h-3 w-px animate-scroll-down bg-blush"></span>
+      </span>
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes scroll-down {
+    0% { transform: translateY(-12px); opacity: 0; }
+    40% { opacity: 1; }
+    100% { transform: translateY(40px); opacity: 0; }
+  }
+  .animate-scroll-down { animation: scroll-down 2s var(--ease-lux) infinite; }
+  [data-hero], [data-hero-visual] { opacity: 0; }
+  [data-float-card] { opacity: 0; }
+</style>
+
+<script>
+  import gsap from 'gsap';
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // giriş animasyonu
+  if (reduce) {
+    gsap.set('[data-hero], [data-hero-visual], [data-float-card]', { opacity: 1 });
+  } else {
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    tl.fromTo('[data-hero]', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.9, stagger: 0.08 })
+      .fromTo('[data-hero-visual]', { opacity: 0, scale: 0.94, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 1.1 }, '-=0.7')
+      .fromTo('[data-float-card]', { opacity: 0, y: 16, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.7, stagger: 0.15 }, '-=0.5');
+
+    // yüzen kartlara hafif salınım
+    gsap.to('[data-float-card]', {
+      y: '+=10',
+      duration: 3,
+      ease: 'sine.inOut',
+      yoyo: true,
+      repeat: -1,
+      stagger: 0.6,
+      delay: 1.4,
+    });
+  }
+
+  // ── ışık partikülleri ─────────────────────────────────────
+  const canvas = document.getElementById('hero-particles') as HTMLCanvasElement | null;
+  if (canvas && !reduce) {
+    const ctx = canvas.getContext('2d');
+    let w = 0, h = 0, raf = 0;
+    const DPR = Math.min(window.devicePixelRatio || 1, 2);
+    type P = { x: number; y: number; r: number; vy: number; vx: number; a: number; tw: number };
+    let parts: P[] = [];
+
+    const palette = ['rgba(201,160,160,', 'rgba(201,166,107,', 'rgba(239,221,211,'];
+
+    const resize = () => {
+      const rect = canvas.parentElement!.getBoundingClientRect();
+      w = rect.width; h = rect.height;
+      canvas.width = w * DPR; canvas.height = h * DPR;
+      ctx!.setTransform(DPR, 0, 0, DPR, 0, 0);
+      const count = Math.min(46, Math.floor(w / 26));
+      parts = Array.from({ length: count }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 2.6 + 0.6,
+        vy: -(Math.random() * 0.25 + 0.05),
+        vx: (Math.random() - 0.5) * 0.18,
+        a: Math.random() * 0.5 + 0.15,
+        tw: Math.random() * Math.PI * 2,
+      }));
+    };
+
+    const tick = () => {
+      ctx!.clearRect(0, 0, w, h);
+      for (const p of parts) {
+        p.y += p.vy; p.x += p.vx; p.tw += 0.02;
+        if (p.y < -10) { p.y = h + 10; p.x = Math.random() * w; }
+        if (p.x < -10) p.x = w + 10;
+        if (p.x > w + 10) p.x = -10;
+        const flicker = p.a * (0.6 + 0.4 * Math.sin(p.tw));
+        const c = palette[Math.floor(p.x + p.y) % palette.length];
+        ctx!.beginPath();
+        ctx!.fillStyle = `${c}${flicker})`;
+        ctx!.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx!.fill();
+      }
+      raf = requestAnimationFrame(tick);
+    };
+
+    resize();
+    tick();
+    window.addEventListener('resize', resize);
+  }
+</script>

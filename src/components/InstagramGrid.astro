@@ -1,0 +1,54 @@
+---
+import Icon from './Icon.astro';
+import Figure from './Figure.astro';
+import { INSTAGRAM } from '../data/gallery';
+import { SITE } from '../data/site';
+---
+<section class="py-24 lg:py-32">
+  <div class="container-lux">
+    <div class="flex flex-col items-center gap-4 text-center">
+      <span class="eyebrow inline-flex items-center gap-2" data-reveal>
+        <Icon name="instagram" class="h-4 w-4 text-blush-deep" /> @lumebeautystudio
+      </span>
+      <h2 class="display-2" data-reveal>Stüdyodan <span class="accent-italic">ilham</span> kareleri</h2>
+      <a
+        href={SITE.socials.instagram}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn btn-ghost mt-2"
+        data-reveal
+      >
+        <Icon name="instagram" class="h-4 w-4" /> Bizi Takip Et
+      </a>
+    </div>
+
+    <div class="mt-12 grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3 lg:grid-cols-6">
+      {INSTAGRAM.map((g) => (
+        <a
+          href={SITE.socials.instagram}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group relative aspect-square overflow-hidden rounded-2xl"
+          data-reveal
+          aria-label={g.caption}
+        >
+          <Figure
+            id={g.image}
+            alt={g.caption}
+            w={420}
+            h={420}
+            class="h-full w-full"
+            imgClass="transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110"
+          />
+          <div class="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-espresso/55 opacity-0 backdrop-blur-[2px] transition-opacity duration-400 group-hover:opacity-100">
+            <Icon name="instagram" class="h-6 w-6 text-cream" />
+            <span class="flex items-center gap-1.5 text-sm text-cream">
+              <Icon name="heart" class="h-4 w-4 text-blush-soft" stroke={1.6} /> {g.likes}
+            </span>
+            <span class="px-3 text-center text-[0.7rem] text-cream/80">{g.caption}</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

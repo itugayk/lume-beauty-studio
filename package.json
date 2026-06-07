@@ -1,0 +1,20 @@
+{
+  "name": "lume-beauty-studio",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Lume Beauty Studio — premium güzellik & bakım salonu demo (Astro + Tailwind + GSAP)",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^5.0.0",
+    "@tailwindcss/vite": "^4.0.0",
+    "tailwindcss": "^4.0.0",
+    "gsap": "^3.12.0",
+    "lenis": "^1.1.0"
+  }
+}

@@ -1,0 +1,70 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import ServiceCards from '../components/ServiceCards.astro';
+import BeforeAfterSection from '../components/BeforeAfterSection.astro';
+import Team from '../components/Team.astro';
+import Testimonials from '../components/Testimonials.astro';
+import InstagramGrid from '../components/InstagramGrid.astro';
+import CTABand from '../components/CTABand.astro';
+import Icon from '../components/Icon.astro';
+import { TEAM } from '../data/team';
+
+const stats = [
+  { value: '15+', label: 'yıllık deneyim' },
+  { value: '4.9', label: 'Google puanı' },
+  { value: '20+', label: 'uzman hizmet' },
+  { value: '1.2K', label: 'mutlu misafir' },
+];
+const words = ['Saç', 'Cilt Bakımı', 'Makyaj', 'Tırnak', 'Gelin', 'Hydrafacial', 'Balyaj', 'Nail Art'];
+---
+<Layout>
+  <Hero />
+
+  <!-- marka felsefesi + istatistik -->
+  <section class="container-lux py-20 lg:py-24">
+    <div class="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+      <div>
+        <span class="eyebrow inline-flex items-center gap-2" data-reveal>
+          <span class="h-px w-7 bg-blush/60"></span>Lume Felsefesi
+        </span>
+        <p class="mt-5 font-serif text-2xl leading-relaxed text-espresso sm:text-3xl" data-reveal>
+          Güzellik, kendinize ayırdığınız <span class="accent-italic">zamanın</span> bir yansımasıdır.
+          Lume’de her dokunuş, doğal ışıltınızı ortaya çıkarmak için tasarlanır.
+        </p>
+        <p class="mt-5 max-w-lg text-mocha-soft" data-reveal>
+          Hijyenden ürün seçimine, ferah atmosferden uzman kadromuza kadar her detayı
+          sizin için özenle düşündük. Burada bir hizmet değil, bir ritüel sizi bekliyor.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        {stats.map((s) => (
+          <div class="card-soft flex flex-col items-center justify-center px-4 py-8 text-center" data-reveal>
+            <span class="font-serif text-4xl text-gradient">{s.value}</span>
+            <span class="mt-1 text-xs uppercase tracking-[0.18em] text-mocha-soft">{s.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- kelime şeridi -->
+  <div class="relative overflow-hidden border-y border-blush/15 bg-powder/40 py-5">
+    <div class="flex w-max animate-marquee items-center gap-8" style="--marquee-duration:32s">
+      {[...words, ...words].map((w) => (
+        <span class="flex items-center gap-8">
+          <span class="font-serif text-xl italic text-mocha/70">{w}</span>
+          <Icon name="sparkle" class="h-4 w-4 text-blush/60" />
+        </span>
+      ))}
+    </div>
+  </div>
+
+  <ServiceCards />
+  <BeforeAfterSection />
+  <Team members={TEAM.slice(0, 4)} />
+  <Testimonials />
+  <InstagramGrid />
+  <CTABand />
+</Layout>

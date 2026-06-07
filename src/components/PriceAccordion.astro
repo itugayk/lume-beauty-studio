@@ -1,0 +1,91 @@
+---
+import Icon from './Icon.astro';
+import { PRICES } from '../data/prices';
+---
+<div class="mx-auto max-w-3xl space-y-4" data-accordion>
+  {PRICES.map((group, i) => (
+    <div
+      class:list={['acc-item card-soft overflow-hidden', i === 0 ? 'is-open' : '']}
+      data-reveal
+    >
+      <button
+        type="button"
+        class="acc-trigger flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
+        aria-expanded={i === 0 ? 'true' : 'false'}
+      >
+        <span class="flex items-center gap-4">
+          <span class="grid h-11 w-11 place-items-center rounded-full bg-blush/15 text-blush-deep">
+            <Icon name={group.icon} class="h-5 w-5" />
+          </span>
+          <span>
+            <span class="block font-serif text-xl text-espresso">{group.title}</span>
+            <span class="block text-xs text-mocha-soft">{group.rows.length} hizmet</span>
+          </span>
+        </span>
+        <span class="acc-chevron grid h-9 w-9 shrink-0 place-items-center rounded-full border border-blush/30 text-blush-deep transition-transform duration-500">
+          <Icon name="chevron" class="h-4 w-4" />
+        </span>
+      </button>
+
+      <div class="acc-panel">
+        <div class="overflow-hidden">
+          <div class="px-6 pb-6">
+            <ul class="divide-y divide-blush/10 border-t border-blush/10">
+              {group.rows.map((row) => (
+                <li class="flex items-baseline justify-between gap-4 py-3.5">
+                  <span class="flex items-baseline gap-2">
+                    <span class="text-mocha">{row.name}</span>
+                    {row.note && <span class="text-xs text-blush-deep">({row.note})</span>}
+                  </span>
+                  <span class="flex-1 translate-y-[-3px] border-b border-dotted border-blush/30"></span>
+                  <span class="whitespace-nowrap font-serif text-lg text-espresso">{row.price}</span>
+                </li>
+              ))}
+            </ul>
+            {group.note && (
+              <p class="mt-4 flex items-center gap-2 text-xs text-mocha-soft">
+                <Icon name="sparkle" class="h-3.5 w-3.5 text-gold" /> {group.note}
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .acc-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.55s var(--ease-lux);
+  }
+  .acc-item.is-open .acc-panel { grid-template-rows: 1fr; }
+  .acc-item.is-open .acc-chevron {
+    transform: rotate(180deg);
+    background: var(--color-blush);
+    color: #fff;
+    border-color: var(--color-blush);
+  }
+  .acc-trigger { cursor: pointer; }
+</style>
+
+<script>
+  document.querySelectorAll('[data-accordion]').forEach((acc) => {
+    const items = acc.querySelectorAll('.acc-item');
+    items.forEach((item) => {
+      const trigger = item.querySelector('.acc-trigger');
+      trigger?.addEventListener('click', () => {
+        const open = item.classList.contains('is-open');
+        items.forEach((other) => {
+          other.classList.remove('is-open');
+          other.querySelector('.acc-trigger')?.setAttribute('aria-expanded', 'false');
+        });
+        if (!open) {
+          item.classList.add('is-open');
+          trigger.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+  });
+</script>

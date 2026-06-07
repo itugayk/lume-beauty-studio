@@ -1,0 +1,31 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  intro?: string;
+  crumb: string;
+}
+const { eyebrow, title, intro, crumb } = Astro.props;
+---
+<section class="bg-grain relative overflow-hidden pt-36 pb-16 lg:pt-44 lg:pb-20">
+  <div class="pointer-events-none absolute inset-0 -z-10">
+    <div class="absolute -right-20 -top-10 h-80 w-80 rounded-full bg-blush-soft/40 blur-3xl"></div>
+    <div class="absolute -left-16 top-1/2 h-72 w-72 rounded-full bg-gold-soft/35 blur-3xl"></div>
+  </div>
+
+  <div class="container-lux">
+    <nav class="mb-6 flex items-center gap-2 text-xs text-mocha-soft" aria-label="breadcrumb" data-reveal>
+      <a href="/" class="transition-colors hover:text-espresso">Ana Sayfa</a>
+      <Icon name="chevron" class="h-3 w-3 -rotate-90 text-blush" />
+      <span class="text-espresso">{crumb}</span>
+    </nav>
+
+    <div class="max-w-3xl">
+      {eyebrow && <span class="eyebrow" data-reveal>{eyebrow}</span>}
+      <h1 class="display-1 mt-4" data-reveal set:html={title} />
+      {intro && <p class="mt-6 max-w-xl text-lg leading-relaxed text-mocha-soft" data-reveal>{intro}</p>}
+    </div>
+  </div>
+</section>

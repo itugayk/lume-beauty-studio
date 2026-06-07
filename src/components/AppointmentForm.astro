@@ -1,0 +1,446 @@
+---
+import Icon from './Icon.astro';
+import { SERVICES } from '../data/services';
+import { TEAM } from '../data/team';
+import { SITE } from '../data/site';
+
+const slots = ['10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00'];
+const steps = [
+  { n: 1, label: 'Hizmet', icon: 'sparkle' },
+  { n: 2, label: 'Uzman', icon: 'user' },
+  { n: 3, label: 'Tarih & Saat', icon: 'calendar' },
+  { n: 4, label: 'Bilgileriniz', icon: 'check' },
+];
+---
+<div data-form-wrap>
+<div class="grid gap-8 lg:grid-cols-[1.5fr_0.9fr]">
+  <!-- FORM -->
+  <form id="randevu-form" novalidate data-wa-base={SITE.whatsapp}>
+    <!-- adım göstergesi -->
+    <ol class="mb-10 flex items-center justify-between">
+      {steps.map((s, i) => (
+        <li class="flex flex-1 items-center" data-step-pill={s.n}>
+          <div class="flex flex-col items-center gap-2">
+            <span class="step-dot grid h-11 w-11 place-items-center rounded-full border border-blush/30 bg-white text-mocha-soft transition-all duration-400">
+              <Icon name={s.icon} class="step-icon h-5 w-5" />
+              <Icon name="check" class="step-check hidden h-5 w-5" />
+            </span>
+            <span class="step-label hidden text-[0.7rem] uppercase tracking-[0.12em] text-mocha-soft sm:block">{s.label}</span>
+          </div>
+          {i < steps.length - 1 && (
+            <span class="step-bar mx-2 h-px flex-1 bg-blush/20 transition-colors duration-500"></span>
+          )}
+        </li>
+      ))}
+    </ol>
+
+    <!-- ADIM 1: HİZMET -->
+    <fieldset class="form-step" data-step="1">
+      <legend class="font-serif text-2xl text-espresso">Hangi hizmeti almak istersiniz?</legend>
+      <p class="mt-1 text-sm text-mocha-soft">Size en uygun bakımı seçelim.</p>
+      <div class="mt-6 grid gap-3 sm:grid-cols-2">
+        {SERVICES.map((s) => (
+          <label class="group relative flex cursor-pointer items-center gap-4 rounded-2xl border border-blush/20 bg-white/60 p-4 transition-all duration-300 hover:border-blush/50 has-[:checked]:border-blush has-[:checked]:bg-blush/5 has-[:checked]:ring-2 has-[:checked]:ring-blush/25">
+            <input type="radio" name="service" value={s.slug} data-label={s.name} class="sr-only" />
+            <span class="grid h-12 w-12 place-items-center rounded-full bg-blush/15 text-blush-deep transition-colors group-has-[:checked]:bg-blush group-has-[:checked]:text-white">
+              <Icon name={s.icon} class="h-6 w-6" />
+            </span>
+            <span>
+              <span class="block font-medium text-espresso">{s.name}</span>
+              <span class="block text-xs text-mocha-soft">{s.tagline}</span>
+            </span>
+            <Icon name="check" class="ml-auto h-5 w-5 text-blush opacity-0 transition-opacity group-has-[:checked]:opacity-100" />
+          </label>
+        ))}
+      </div>
+      <p class="step-error mt-3 hidden text-sm text-red-500">Lütfen bir hizmet seçin.</p>
+    </fieldset>
+
+    <!-- ADIM 2: UZMAN -->
+    <fieldset class="form-step hidden" data-step="2">
+      <legend class="font-serif text-2xl text-espresso">Bir uzman seçin</legend>
+      <p class="mt-1 text-sm text-mocha-soft">Dilerseniz tercihinizi bize bırakabilirsiniz.</p>
+      <div class="mt-6 grid gap-3 sm:grid-cols-2">
+        <label class="group relative flex cursor-pointer items-center gap-4 rounded-2xl border border-blush/20 bg-white/60 p-4 transition-all duration-300 hover:border-blush/50 has-[:checked]:border-blush has-[:checked]:bg-blush/5 has-[:checked]:ring-2 has-[:checked]:ring-blush/25">
+          <input type="radio" name="expert" value="Farketmez" data-label="Farketmez" class="sr-only" checked />
+          <span class="grid h-12 w-12 place-items-center rounded-full bg-blush/15 text-blush-deep transition-colors group-has-[:checked]:bg-blush group-has-[:checked]:text-white">
+            <Icon name="sparkle" class="h-6 w-6" />
+          </span>
+          <span>
+            <span class="block font-medium text-espresso">Farketmez</span>
+            <span class="block text-xs text-mocha-soft">En uygun uzmanı biz atayalım</span>
+          </span>
+          <Icon name="check" class="ml-auto h-5 w-5 text-blush opacity-0 transition-opacity group-has-[:checked]:opacity-100" />
+        </label>
+        {TEAM.map((m) => (
+          <label class="group relative flex cursor-pointer items-center gap-4 rounded-2xl border border-blush/20 bg-white/60 p-4 transition-all duration-300 hover:border-blush/50 has-[:checked]:border-blush has-[:checked]:bg-blush/5 has-[:checked]:ring-2 has-[:checked]:ring-blush/25">
+            <input type="radio" name="expert" value={m.name} data-label={m.name} class="sr-only" />
+            <span class="grid h-12 w-12 place-items-center rounded-full bg-blush/15 font-serif text-lg text-blush-deep transition-colors group-has-[:checked]:bg-blush group-has-[:checked]:text-white">
+              {m.name.charAt(0)}
+            </span>
+            <span>
+              <span class="block font-medium text-espresso">{m.name}</span>
+              <span class="block text-xs text-mocha-soft">{m.role}</span>
+            </span>
+            <Icon name="check" class="ml-auto h-5 w-5 text-blush opacity-0 transition-opacity group-has-[:checked]:opacity-100" />
+          </label>
+        ))}
+      </div>
+    </fieldset>
+
+    <!-- ADIM 3: TARİH & SAAT -->
+    <fieldset class="form-step hidden" data-step="3">
+      <legend class="font-serif text-2xl text-espresso">Tarih ve saat</legend>
+      <p class="mt-1 text-sm text-mocha-soft">Size uygun zamanı belirleyin.</p>
+
+      <div class="mt-6">
+        <label for="date" class="mb-2 block text-sm font-medium text-mocha">Tarih</label>
+        <input
+          type="date"
+          id="date"
+          name="date"
+          class="w-full rounded-2xl border border-blush/20 bg-white/60 px-4 py-3.5 text-mocha outline-none transition-all focus:border-blush focus:ring-2 focus:ring-blush/25 sm:max-w-xs"
+        />
+      </div>
+
+      <div class="mt-6">
+        <span class="mb-2 block text-sm font-medium text-mocha">Saat</span>
+        <div class="grid grid-cols-3 gap-2 sm:grid-cols-5" data-slots>
+          {slots.map((t) => (
+            <button
+              type="button"
+              class="slot rounded-xl border border-blush/20 bg-white/60 py-2.5 text-sm text-mocha transition-all duration-200 hover:border-blush"
+              data-slot={t}
+            >
+              {t}
+            </button>
+          ))}
+        </div>
+      </div>
+      <p class="step-error mt-3 hidden text-sm text-red-500">Lütfen tarih ve saat seçin.</p>
+    </fieldset>
+
+    <!-- ADIM 4: BİLGİLER -->
+    <fieldset class="form-step hidden" data-step="4">
+      <legend class="font-serif text-2xl text-espresso">İletişim bilgileriniz</legend>
+      <p class="mt-1 text-sm text-mocha-soft">Randevunuzu onaylamak için size ulaşalım.</p>
+
+      <div class="mt-6 grid gap-4 sm:grid-cols-2">
+        <div>
+          <label for="name" class="mb-2 block text-sm font-medium text-mocha">Ad Soyad *</label>
+          <input type="text" id="name" name="name" placeholder="Adınız Soyadınız" autocomplete="name"
+            class="w-full rounded-2xl border border-blush/20 bg-white/60 px-4 py-3.5 text-mocha outline-none transition-all focus:border-blush focus:ring-2 focus:ring-blush/25" />
+          <p class="field-error mt-1.5 hidden text-xs text-red-500"></p>
+        </div>
+        <div>
+          <label for="phone" class="mb-2 block text-sm font-medium text-mocha">Telefon *</label>
+          <input type="tel" id="phone" name="phone" placeholder="05XX XXX XX XX" autocomplete="tel"
+            class="w-full rounded-2xl border border-blush/20 bg-white/60 px-4 py-3.5 text-mocha outline-none transition-all focus:border-blush focus:ring-2 focus:ring-blush/25" />
+          <p class="field-error mt-1.5 hidden text-xs text-red-500"></p>
+        </div>
+        <div class="sm:col-span-2">
+          <label for="email" class="mb-2 block text-sm font-medium text-mocha">E-posta (opsiyonel)</label>
+          <input type="email" id="email" name="email" placeholder="ornek@eposta.com" autocomplete="email"
+            class="w-full rounded-2xl border border-blush/20 bg-white/60 px-4 py-3.5 text-mocha outline-none transition-all focus:border-blush focus:ring-2 focus:ring-blush/25" />
+          <p class="field-error mt-1.5 hidden text-xs text-red-500"></p>
+        </div>
+        <div class="sm:col-span-2">
+          <label for="note" class="mb-2 block text-sm font-medium text-mocha">Not (opsiyonel)</label>
+          <textarea id="note" name="note" rows="3" placeholder="Eklemek istedikleriniz..."
+            class="w-full resize-none rounded-2xl border border-blush/20 bg-white/60 px-4 py-3.5 text-mocha outline-none transition-all focus:border-blush focus:ring-2 focus:ring-blush/25"></textarea>
+        </div>
+      </div>
+      <label class="mt-4 flex items-start gap-2.5 text-xs text-mocha-soft">
+        <input type="checkbox" id="kvkk" class="mt-0.5 accent-[#c9a0a0]" />
+        <span>Kişisel verilerimin randevu amacıyla işlenmesini kabul ediyorum. (Bu bir demodur; gerçek bir kayıt oluşturulmaz.)</span>
+      </label>
+      <p class="step-error mt-3 hidden text-sm text-red-500"></p>
+    </fieldset>
+
+    <!-- NAVİGASYON -->
+    <div class="mt-8 flex items-center justify-between gap-4">
+      <button type="button" class="btn btn-ghost invisible" data-back>
+        <Icon name="chevron" class="h-4 w-4 rotate-90" /> Geri
+      </button>
+      <button type="button" class="btn btn-primary" data-next>
+        Devam <Icon name="arrow" class="h-4 w-4" />
+      </button>
+      <button type="submit" class="btn btn-blush hidden" data-submit>
+        <Icon name="check" class="h-4 w-4" /> Randevuyu Tamamla
+      </button>
+    </div>
+  </form>
+
+  <!-- ÖZET KARTI -->
+  <aside class="lg:sticky lg:top-28 lg:self-start">
+    <div class="card-soft overflow-hidden">
+      <div class="bg-gradient-to-br from-blush to-blush-deep px-6 py-5 text-white">
+        <p class="text-xs uppercase tracking-[0.2em] text-white/80">Randevu Özeti</p>
+        <p class="mt-1 font-serif text-xl">Lume Beauty Studio</p>
+      </div>
+      <dl class="space-y-3 px-6 py-6 text-sm">
+        <div class="flex items-center justify-between gap-3">
+          <dt class="text-mocha-soft">Hizmet</dt>
+          <dd class="font-medium text-espresso" data-sum="service">—</dd>
+        </div>
+        <div class="flex items-center justify-between gap-3">
+          <dt class="text-mocha-soft">Uzman</dt>
+          <dd class="font-medium text-espresso" data-sum="expert">Farketmez</dd>
+        </div>
+        <div class="flex items-center justify-between gap-3">
+          <dt class="text-mocha-soft">Tarih</dt>
+          <dd class="font-medium text-espresso" data-sum="date">—</dd>
+        </div>
+        <div class="flex items-center justify-between gap-3">
+          <dt class="text-mocha-soft">Saat</dt>
+          <dd class="font-medium text-espresso" data-sum="time">—</dd>
+        </div>
+        <div class="flex items-center justify-between gap-3 border-t border-blush/10 pt-3">
+          <dt class="text-mocha-soft">Ad Soyad</dt>
+          <dd class="font-medium text-espresso" data-sum="name">—</dd>
+        </div>
+      </dl>
+      <div class="border-t border-blush/10 px-6 py-4">
+        <p class="flex items-center gap-2 text-xs text-mocha-soft">
+          <Icon name="pin" class="h-4 w-4 text-blush-deep" /> {SITE.address.full}
+        </p>
+      </div>
+    </div>
+  </aside>
+</div>
+</div>
+
+<!-- BAŞARI DURUMU -->
+<div id="randevu-success" class="hidden">
+  <div class="card-soft mx-auto max-w-xl overflow-hidden text-center">
+    <div class="bg-gradient-to-br from-blush to-blush-deep px-8 py-10 text-white">
+      <span class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-white/20">
+        <Icon name="check" class="h-8 w-8" stroke={2} />
+      </span>
+      <h3 class="mt-5 font-serif text-3xl">Talebiniz alındı!</h3>
+      <p class="mx-auto mt-2 max-w-sm text-sm text-white/85">
+        Randevu talebiniz oluşturuldu. Onay için kısa süre içinde sizinle iletişime geçeceğiz.
+      </p>
+    </div>
+    <div class="px-8 py-7">
+      <div class="rounded-2xl bg-powder/50 px-5 py-4 text-left text-sm" data-success-summary></div>
+      <p class="mt-4 text-xs text-mocha-soft">Bu bir demodur — gerçek bir kayıt oluşturulmaz.</p>
+      <div class="mt-5 flex flex-col gap-3 sm:flex-row sm:justify-center">
+        <a href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary" data-wa-confirm>
+          <Icon name="whatsapp" class="h-4 w-4" /> WhatsApp'tan İlet
+        </a>
+        <button type="button" class="btn btn-ghost" data-reset>Yeni Randevu</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  [data-step-pill].is-active .step-dot { border-color: var(--color-blush); background: var(--color-blush); color: #fff; transform: scale(1.05); }
+  [data-step-pill].is-done .step-dot { border-color: var(--color-blush); background: var(--color-blush); color: #fff; }
+  [data-step-pill].is-done .step-icon { display: none; }
+  [data-step-pill].is-done .step-check { display: block; }
+  [data-step-pill].is-active .step-label,
+  [data-step-pill].is-done .step-label { color: var(--color-espresso); }
+  [data-step-pill].is-done .step-bar { background: var(--color-blush); }
+  .slot.is-sel { border-color: var(--color-blush); background: var(--color-blush); color: #fff; }
+</style>
+
+<script>
+  const form = document.getElementById('randevu-form') as HTMLFormElement | null;
+  if (form) {
+    const TOTAL = 4;
+    let current = 1;
+
+    const pills = Array.from(document.querySelectorAll('[data-step-pill]')) as HTMLElement[];
+    const stepsEls = Array.from(form.querySelectorAll('.form-step')) as HTMLElement[];
+    const backBtn = form.querySelector('[data-back]') as HTMLButtonElement;
+    const nextBtn = form.querySelector('[data-next]') as HTMLButtonElement;
+    const submitBtn = form.querySelector('[data-submit]') as HTMLButtonElement;
+    const slotBtns = Array.from(form.querySelectorAll('.slot')) as HTMLButtonElement[];
+    const dateInput = form.querySelector('#date') as HTMLInputElement;
+
+    let chosenTime = '';
+
+    // tarih min = bugün
+    const today = new Date();
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const isoToday = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`;
+    dateInput.min = isoToday;
+
+    // URL'den hizmet ön seçimi
+    const pre = new URLSearchParams(location.search).get('hizmet');
+    if (pre) {
+      const radio = form.querySelector(`input[name="service"][value="${pre}"]`) as HTMLInputElement | null;
+      if (radio) radio.checked = true;
+    }
+
+    const sum = (key: string, val: string) => {
+      document.querySelectorAll(`[data-sum="${key}"]`).forEach((el) => (el.textContent = val || '—'));
+    };
+
+    const fmtDate = (iso: string) => {
+      if (!iso) return '';
+      const d = new Date(iso + 'T00:00:00');
+      return d.toLocaleDateString('tr-TR', { day: '2-digit', month: 'long', year: 'numeric' });
+    };
+
+    // canlı özet
+    form.addEventListener('change', (e) => {
+      const t = e.target as HTMLInputElement;
+      if (t.name === 'service') sum('service', t.dataset.label || '');
+      if (t.name === 'expert') sum('expert', t.dataset.label || '');
+      if (t.id === 'date') sum('date', fmtDate(t.value));
+      if (t.id === 'name') sum('name', t.value.trim());
+    });
+    form.querySelector('#name')?.addEventListener('input', (e) =>
+      sum('name', (e.target as HTMLInputElement).value.trim()),
+    );
+
+    // saat seçimi
+    slotBtns.forEach((b) =>
+      b.addEventListener('click', () => {
+        slotBtns.forEach((x) => x.classList.remove('is-sel'));
+        b.classList.add('is-sel');
+        chosenTime = b.dataset.slot || '';
+        sum('time', chosenTime);
+      }),
+    );
+
+    const showError = (msg?: string) => {
+      const el = stepsEls[current - 1].querySelector('.step-error') as HTMLElement | null;
+      if (el) {
+        if (msg) el.textContent = msg;
+        el.classList.remove('hidden');
+      }
+    };
+    const clearError = () => {
+      stepsEls[current - 1].querySelectorAll('.step-error, .field-error').forEach((e) => e.classList.add('hidden'));
+    };
+
+    const validate = (step: number): boolean => {
+      clearError();
+      if (step === 1) {
+        if (!form.querySelector('input[name="service"]:checked')) {
+          showError('Lütfen bir hizmet seçin.');
+          return false;
+        }
+      }
+      if (step === 3) {
+        if (!dateInput.value || !chosenTime) {
+          showError('Lütfen tarih ve saat seçin.');
+          return false;
+        }
+      }
+      if (step === 4) {
+        let ok = true;
+        const name = form.querySelector('#name') as HTMLInputElement;
+        const phone = form.querySelector('#phone') as HTMLInputElement;
+        const email = form.querySelector('#email') as HTMLInputElement;
+        const kvkk = form.querySelector('#kvkk') as HTMLInputElement;
+
+        const setField = (input: HTMLInputElement, msg: string) => {
+          const p = input.parentElement?.querySelector('.field-error') as HTMLElement | null;
+          if (p) { p.textContent = msg; p.classList.remove('hidden'); }
+          input.classList.add('!border-red-400');
+          ok = false;
+        };
+        const clearField = (input: HTMLInputElement) => {
+          const p = input.parentElement?.querySelector('.field-error') as HTMLElement | null;
+          p?.classList.add('hidden');
+          input.classList.remove('!border-red-400');
+        };
+
+        clearField(name); clearField(phone); clearField(email);
+        if (name.value.trim().length < 2) setField(name, 'Lütfen adınızı girin.');
+        const digits = phone.value.replace(/\D/g, '');
+        if (digits.length < 10) setField(phone, 'Geçerli bir telefon numarası girin.');
+        if (email.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) setField(email, 'Geçerli bir e-posta girin.');
+        if (!kvkk.checked) { showError('Devam etmek için onay kutusunu işaretleyin.'); ok = false; }
+        return ok;
+      }
+      return true;
+    };
+
+    const render = () => {
+      stepsEls.forEach((el, i) => el.classList.toggle('hidden', i + 1 !== current));
+      pills.forEach((p, i) => {
+        p.classList.toggle('is-active', i + 1 === current);
+        p.classList.toggle('is-done', i + 1 < current);
+      });
+      backBtn.classList.toggle('invisible', current === 1);
+      nextBtn.classList.toggle('hidden', current === TOTAL);
+      submitBtn.classList.toggle('hidden', current !== TOTAL);
+      form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    nextBtn.addEventListener('click', () => {
+      if (!validate(current)) return;
+      if (current < TOTAL) { current++; render(); }
+    });
+    backBtn.addEventListener('click', () => {
+      if (current > 1) { current--; clearError(); render(); }
+    });
+
+    const buildMessage = () => {
+      const service = (form.querySelector('input[name="service"]:checked') as HTMLInputElement)?.dataset.label || '';
+      const expert = (form.querySelector('input[name="expert"]:checked') as HTMLInputElement)?.dataset.label || 'Farketmez';
+      const name = (form.querySelector('#name') as HTMLInputElement).value.trim();
+      const phone = (form.querySelector('#phone') as HTMLInputElement).value.trim();
+      const note = (form.querySelector('#note') as HTMLTextAreaElement).value.trim();
+      const date = fmtDate(dateInput.value);
+      return { service, expert, name, phone, date, time: chosenTime, note };
+    };
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!validate(4)) return;
+      const m = buildMessage();
+
+      const text =
+        `Merhaba Lume Beauty Studio, randevu talebim:%0A` +
+        `• Hizmet: ${m.service}%0A` +
+        `• Uzman: ${m.expert}%0A` +
+        `• Tarih: ${m.date}%0A` +
+        `• Saat: ${m.time}%0A` +
+        `• Ad Soyad: ${m.name}%0A` +
+        `• Telefon: ${m.phone}` +
+        (m.note ? `%0A• Not: ${m.note}` : '');
+      const base = form.dataset.waBase;
+      const wa = document.querySelector('[data-wa-confirm]') as HTMLAnchorElement;
+      if (wa) wa.href = `https://wa.me/${base}?text=${text}`;
+
+      const summary = document.querySelector('[data-success-summary]') as HTMLElement;
+      if (summary) {
+        summary.innerHTML = `
+          <div class="space-y-1.5">
+            <div class="flex justify-between gap-3"><span class="text-mocha-soft">Hizmet</span><span class="font-medium text-espresso">${m.service}</span></div>
+            <div class="flex justify-between gap-3"><span class="text-mocha-soft">Uzman</span><span class="font-medium text-espresso">${m.expert}</span></div>
+            <div class="flex justify-between gap-3"><span class="text-mocha-soft">Tarih</span><span class="font-medium text-espresso">${m.date}</span></div>
+            <div class="flex justify-between gap-3"><span class="text-mocha-soft">Saat</span><span class="font-medium text-espresso">${m.time}</span></div>
+            <div class="flex justify-between gap-3"><span class="text-mocha-soft">Ad Soyad</span><span class="font-medium text-espresso">${m.name}</span></div>
+          </div>`;
+      }
+
+      document.querySelector('[data-form-wrap]')?.classList.add('hidden');
+      const success = document.getElementById('randevu-success');
+      success?.classList.remove('hidden');
+      success?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    document.querySelector('[data-reset]')?.addEventListener('click', () => {
+      form.reset();
+      chosenTime = '';
+      slotBtns.forEach((x) => x.classList.remove('is-sel'));
+      current = 1;
+      ['service', 'date', 'time', 'name'].forEach((k) => sum(k, ''));
+      sum('expert', 'Farketmez');
+      render();
+      document.getElementById('randevu-success')?.classList.add('hidden');
+      document.querySelector('[data-form-wrap]')?.classList.remove('hidden');
+      form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    render();
+  }
+</script>

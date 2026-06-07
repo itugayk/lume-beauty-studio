@@ -1,0 +1,111 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { SITE, NAV } from '../data/site';
+import { SERVICES } from '../data/services';
+
+const year = 2026;
+const socials = [
+  { name: 'instagram', href: SITE.socials.instagram, label: 'Instagram' },
+  { name: 'pinterest', href: SITE.socials.pinterest, label: 'Pinterest' },
+  { name: 'tiktok', href: SITE.socials.tiktok, label: 'TikTok' },
+  { name: 'facebook', href: SITE.socials.facebook, label: 'Facebook' },
+];
+---
+<footer class="relative overflow-hidden bg-espresso text-cream/80">
+  <div class="bg-grain absolute inset-0 opacity-100"></div>
+  <!-- üst CTA -->
+  <div class="container-lux relative pt-20">
+    <div class="flex flex-col items-center gap-6 border-b border-white/10 pb-16 text-center">
+      <span class="eyebrow text-blush-soft" data-reveal>Hazır mısın?</span>
+      <h2 class="display-2 max-w-2xl text-cream" data-reveal>
+        Işıltını ortaya çıkarmak için <span class="accent-italic text-blush-soft">bir randevu</span> yeterli.
+      </h2>
+      <div class="flex flex-wrap items-center justify-center gap-3" data-reveal>
+        <a href="/randevu" class="btn btn-blush">Online Randevu</a>
+        <a href="/iletisim" class="btn btn-ghost !border-white/30 !text-cream hover:!bg-white hover:!text-espresso">
+          Bize Ulaş
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ana footer -->
+  <div class="container-lux relative grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-12">
+    <div class="lg:col-span-4">
+      <Logo class="[&_span:first-child]:!text-cream [&_.text-espresso]:!text-cream" />
+      <p class="mt-5 max-w-xs text-sm leading-relaxed text-cream/60">
+        {SITE.description}
+      </p>
+      <div class="mt-6 flex gap-3">
+        {socials.map((s) => (
+          <a
+            href={s.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="grid h-10 w-10 place-items-center rounded-full border border-white/15 text-cream/70 transition-all duration-300 hover:border-blush hover:bg-blush hover:text-white"
+            aria-label={s.label}
+          >
+            <Icon name={s.name} class="h-4.5 w-4.5" />
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <div class="lg:col-span-2">
+      <h3 class="mb-4 text-sm font-medium uppercase tracking-[0.2em] text-cream">Menü</h3>
+      <ul class="space-y-2.5 text-sm">
+        {NAV.map((n) => (
+          <li>
+            <a href={n.href} class="text-cream/60 transition-colors hover:text-blush-soft">{n.label}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="lg:col-span-3">
+      <h3 class="mb-4 text-sm font-medium uppercase tracking-[0.2em] text-cream">Hizmetler</h3>
+      <ul class="space-y-2.5 text-sm">
+        {SERVICES.map((s) => (
+          <li>
+            <a href="/hizmetler" class="text-cream/60 transition-colors hover:text-blush-soft">{s.name} — {s.tagline}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="lg:col-span-3">
+      <h3 class="mb-4 text-sm font-medium uppercase tracking-[0.2em] text-cream">İletişim</h3>
+      <ul class="space-y-3.5 text-sm text-cream/60">
+        <li class="flex gap-3">
+          <Icon name="pin" class="h-4.5 w-4.5 shrink-0 text-blush-soft" />
+          <span>{SITE.address.full}</span>
+        </li>
+        <li class="flex gap-3">
+          <Icon name="phone" class="h-4.5 w-4.5 shrink-0 text-blush-soft" />
+          <a href={`tel:${SITE.phone}`} class="hover:text-blush-soft">{SITE.phoneDisplay}</a>
+        </li>
+        <li class="flex gap-3">
+          <Icon name="mail" class="h-4.5 w-4.5 shrink-0 text-blush-soft" />
+          <a href={`mailto:${SITE.email}`} class="hover:text-blush-soft">{SITE.email}</a>
+        </li>
+        <li class="flex gap-3">
+          <Icon name="clock" class="h-4.5 w-4.5 shrink-0 text-blush-soft" />
+          <span>{SITE.hours[0].day}: {SITE.hours[0].time}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="container-lux relative">
+    <div class="flex flex-col items-center justify-between gap-3 border-t border-white/10 py-6 text-xs text-cream/40 sm:flex-row">
+      <p>© {year} {SITE.name}. Tüm hakları saklıdır.</p>
+      <p class="flex items-center gap-1.5">
+        <span>Sevgiyle tasarlandı</span>
+        <Icon name="heart" class="h-3.5 w-3.5 text-blush" stroke={1.5} />
+        <span>·</span>
+        <span>{SITE.domain}</span>
+      </p>
+    </div>
+  </div>
+</footer>
